@@ -11,6 +11,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import com.security.nacer.securityService.JpaClientDetailsService;
 
@@ -20,6 +23,18 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter{
 	
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Bean
+	public TokenStore jwtTokenStore() {
+		return new JwtTokenStore(converter());
+	}
+	
+	@Bean
+	public JwtAccessTokenConverter converter() {
+		JwtAccessTokenConverter conv = new JwtAccessTokenConverter();
+		conv.setSigningKey("signature");
+		return conv;
+	}
 	
 	@Bean
 	public JpaClientDetailsService cclientDetailsService() {
@@ -41,7 +56,9 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter{
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.authenticationManager(authenticationManager);
+		endpoints.authenticationManager(authenticationManager)
+				 .tokenStore(jwtTokenStore())
+				 .accessTokenConverter(converter());
 
 	}
 
