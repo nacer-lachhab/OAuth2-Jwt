@@ -12,7 +12,7 @@
 	<artifactId>security_nonOpack_tokens_c16</artifactId>
 	<version>v01</version>
 	<name>security_JWT_c16</name>
-	<description>spring security with non apque Tokens</description>
+	<description>Autoriozation OAuth2 Server generating non apque Tokens:JWT, clients are red from DataBase</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
